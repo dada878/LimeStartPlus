@@ -1,4 +1,6 @@
-# diary
+# Interdiction
+一個Vue專案，青檸起始頁仿寫、修改
+# Usage
 
 ## Project setup
 ```
@@ -24,6 +26,3 @@ npm run test:unit
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
