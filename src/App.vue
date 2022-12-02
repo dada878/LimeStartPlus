@@ -2,7 +2,8 @@
   <img :class="{background: true, active:searchFocus}" src="./assets/background.webp" />
   <div class="cover"></div>
   <TimeVue />
-  <SearchBarVue @search-focus="(searchFocus = true)" @search-unfocus="(searchFocus = false)" />
+  <SearchBarVue @search-focus="(searchFocus = true)" @search-unfocus="(searchFocus = false)"  v-model="searchBarValue" />
+  <searchSuggestionVue :show="(searchFocus && searchBarValue != '')" :search-bar-value="searchBarValue"/>
 </template>
 
 <style lang="scss">
@@ -58,16 +59,30 @@ nav {
   }
 }
 
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>
 <script lang="ts">
 import TimeVue from './components/TitleTime.vue';
 import SearchBarVue from './components/SearchBar.vue';
+import searchSuggestionVue from './components/searchSuggestion.vue';
 export default {
-  components: {TimeVue, SearchBarVue},
+  components: {TimeVue, SearchBarVue, searchSuggestionVue},
   data() {
     return {
-      searchFocus: false
+      searchFocus: false,
+      searchBarValue: ""
     }
   },
+  created() {
+    document.addEventListener('contextmenu', event => event.preventDefault());
+  }
 }
 </script>

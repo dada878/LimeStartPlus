@@ -1,8 +1,10 @@
 <template>
     <div class="searchBar">
         <input
-            @focusin="$emit('search-focus')"
-            @focusout="$emit('search-unfocus')"
+            @focusin="$emit('search-focus'); focus = true"
+            @focusout="$emit('search-unfocus'); focus = false"
+            :value="modelValue"
+            @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
             type="text"
             name="word"
             size="30"
@@ -10,6 +12,11 @@
             autocomplete="off"
             inputmode="search" 
         />
+        <Transition>
+            <span v-show="focus" style="position: fixed; margin-top: 10px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+        </Transition>
     </div>
 </template>
 <style lang="scss">
@@ -41,10 +48,12 @@
         font-family: var(--fonts);
         text-align: center;
         &::placeholder {
+            transition: 200ms;
             color: #e4e9ed;
+            opacity: 1;
         }
         &:focus::placeholder {
-            color: transparent;
+            opacity: 0;
         }
     }
     &:hover {
@@ -53,12 +62,26 @@
     }
     &:focus-within {
         width: 530px;
-        background-color: rgba(15,15,15,.6);
+        background-color: rgba(30,30,30,.9);   
     }
 }
+
+
 </style>
 <script lang="ts">
 export default {
-    name: "search-bar"
+    name: "search-bar",
+    data() {
+        return {
+            focus: false
+        }
+    },
+    props: {
+        modelValue: {
+            type: String,
+            default: '',
+            required: true
+        }
+    }
 }
 </script>
