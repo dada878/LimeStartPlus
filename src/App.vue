@@ -2,8 +2,19 @@
   <img :class="{background: true, active:searchFocus}" src="./assets/background.webp" />
   <div class="cover"></div>
   <TimeVue />
-  <SearchBarVue @search-focus="(searchFocus = true)" @search-unfocus="(searchFocus = false)"  v-model="searchBarValue" />
-  <searchSuggestionVue :show="(searchFocus && searchBarValue != '')" :search-bar-value="searchBarValue"/>
+  <SearchBarVue
+    @search-focus="(searchFocus = true)"
+    @search-unfocus="searchFocus = false; suggestSelected = -1"
+    @move-selected="(val) => suggestSelected+=val"
+    :suggest-word="suggestKeyword"
+    v-model="searchBarValue"
+  />
+  <searchSuggestionVue
+    :suggest-selected="suggestSelected"
+    :show="(searchFocus && searchBarValue != '')"
+    :search-bar-value="searchBarValue"
+    @update-searchbar-value="(val) => suggestKeyword = val"
+  />
 </template>
 
 <style lang="scss">
@@ -73,13 +84,15 @@ nav {
 <script lang="ts">
 import TimeVue from './components/TitleTime.vue';
 import SearchBarVue from './components/SearchBar.vue';
-import searchSuggestionVue from './components/searchSuggestion.vue';
+import searchSuggestionVue from './components/SearchSuggestion.vue';
 export default {
   components: {TimeVue, SearchBarVue, searchSuggestionVue},
   data() {
     return {
       searchFocus: false,
-      searchBarValue: ""
+      searchBarValue: "",
+      suggestSelected: -1,
+      suggestKeyword: ""
     }
   },
   created() {

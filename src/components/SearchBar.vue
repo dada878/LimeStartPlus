@@ -5,6 +5,9 @@
             @focusout="$emit('search-unfocus'); focus = false"
             :value="modelValue"
             @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+            @keyup.enter="goSearch"
+            @keydown.up="$emit('move-selected', -1)"
+            @keydown.down="$emit('move-selected', 1)"
             type="text"
             name="word"
             size="30"
@@ -13,7 +16,7 @@
             inputmode="search" 
         />
         <Transition>
-            <span v-show="focus" style="position: fixed;">
+            <span v-show="focus" style="position: fixed;" @click="goSearch">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </span>
         </Transition>
@@ -56,19 +59,22 @@
             opacity: 0;
         }
     }
-    &:hover,
-    &:focus-within {
+    &:hover {
         width: 530px;
         background-color: rgba(15,15,15,.6);
     }
+    &:focus-within {
+        width: 530px;
+        background-color: rgba(30,30,30,.9);
+    }
     & span {
-        transform: translateX(-6px);
-        background-color: rgba(0, 0, 0, 0.0);
+        transform: translateX(-10px);
         padding: 11px;
         transition: 200ms;
         cursor: pointer;
+        padding-right: 20px;
         &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(105, 105, 105, 0.308);
         }
     }
 }
@@ -87,8 +93,23 @@ export default defineComponent({
     props: {
         modelValue: {
             type: String,
-            default: '',
+            default: "",
             required: true
+        },
+        suggestWord: {
+            type: String,
+            default: "",
+            required: true,
+        }
+    },
+    methods: {
+        goSearch() {
+            if (!this.modelValue) return;
+            if (this.suggestWord) {
+                window.location.href = `https://www.google.com/search?q=${this.suggestWord}`;
+            } else {
+                window.location.href = `https://www.google.com/search?q=${this.modelValue}`;
+            }
         }
     }
 });

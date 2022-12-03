@@ -1,7 +1,8 @@
 <template>
     <Transition>
         <div v-show="show" id="searchSuggestion" style="height: 270px;">
-            <div v-for="item in suggests" :key="item">{{ item }}</div>
+            <!-- TODO: make the element as <a> -->
+            <div v-for="item, index in suggests" :key="index" :class="{focus:index == toIndex(suggestSelected as number)}">{{ item }}</div>
         </div>
     </Transition>
 </template>
@@ -16,15 +17,39 @@ export default defineComponent({
     },
     props: {
         show: {
-            type: Boolean
+            type: Boolean,
+            required: true
         },
         searchBarValue: {
-            type: String
+            type: String,
+            required: true
+        },
+        suggestSelected: {
+            type: Number,
+            required: true
         }
     },
     watch: {
-        searchBarValue(after: string) {
-            axios.get('http://localhost:8000/search.php?keyword=' + after).then((result) => {
+        searchBarValue() {
+            this.getSuggests(this.searchBarValue);
+        },
+        show() {
+            this.getSuggests(this.searchBarValue);
+        },
+        suggestSelected() {
+            this.$emit("update-searchbar-value", this.suggests[this.toIndex(this.suggestSelected)]);
+        }
+    },
+    methods: {
+        toIndex(val: number) : number {
+            if (val >= 0) {
+                return val % (this.suggests.length);
+            } else {
+                return this.toIndex(val + this.suggests.length);
+            }
+        },
+        getSuggests(keyword:string) {
+            axios.get('http://localhost:8000/search.php?keyword=' + keyword).then((result) => {
                 if (result.data.length > 0) this.suggests = result.data;
             });
         }
