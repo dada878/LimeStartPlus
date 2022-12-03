@@ -1,6 +1,6 @@
 <template>
     <div class="title">
-        <p>22:14</p>
+        <p>{{hours}}:{{minutes}}</p>
     </div>
 </template>
 <style lang="scss">
@@ -29,7 +29,26 @@
 
 </style>
 <script lang="ts">
-export default {
-    name:"title-time"
-}
+import { defineComponent } from 'vue';
+export default defineComponent({
+    name:"title-time",
+    data() {
+        return {
+            hours: "",
+            minutes: ""
+        }
+    },
+    methods: {
+        getTimeNow() {
+            const zerofilled = (num:number) => ('00' + num).slice(-2);
+            const dateObj =  new Date();
+            this.hours = zerofilled(dateObj.getHours());
+            this.minutes = zerofilled(dateObj.getMinutes());
+        }
+    },
+    created() {
+        this.getTimeNow();
+        setInterval(this.getTimeNow, 1000);
+    }
+});
 </script>

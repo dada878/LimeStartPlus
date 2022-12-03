@@ -1,25 +1,17 @@
 <template>
     <Transition>
-        <div v-show="show" id="searchSuggestionContainer" style="height: 270px;">
+        <div v-show="show" id="searchSuggestion" style="height: 270px;">
             <div v-for="item in suggests" :key="item">{{ item }}</div>
         </div>
     </Transition>
 </template>
 <script lang="ts">
 import axios from 'axios';
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
     data() {
         return {
-            suggests: [
-                "aaa",
-                "bbb", "aaa",
-                "bbb", "aaa",
-                "bbb", "aaa",
-                "bbb", "aaa",
-                "bbb", "aaa",
-                "bbb", "aaa",
-                "bbb",
-            ]
+            suggests: []
         }
     },
     props: {
@@ -31,18 +23,16 @@ export default {
         }
     },
     watch: {
-        //FIXME: 完成搜尋關鍵字推薦
         searchBarValue(after: string) {
             axios.get('http://localhost:8000/search.php?keyword=' + after).then((result) => {
-                // this.suggests = result.data;
-                console.log(result.data);
+                if (result.data.length > 0) this.suggests = result.data;
             });
         }
     }
-}
+})
 </script>
 <style lang="scss">
-#searchSuggestionContainer {
+#searchSuggestion {
     z-index: 40;
     position: absolute;
     top: 255px;
@@ -57,25 +47,24 @@ export default {
     transition: .25s;
     -webkit-backdrop-filter: blur(30px) saturate(1.25);
     backdrop-filter: blur(30px) saturate(1.25);
-}
-
-#searchSuggestionContainer div {
-    overflow: hidden;
-    clear: both;
-    height: 30px;
-    padding-right: 10px;
-    text-indent: 20px;
-    line-height: 30px;
-    cursor: pointer;
-    background: rgba(0, 0, 0, .1);
-    color: rgba(255, 255, 255, .8);
-    transition: .15s;
-    text-align: start;
-}
-
-#searchSuggestionContainer div.focus,
-#searchSuggestionContainer div:hover {
-    text-indent: 30px;
-    background: rgba(0, 0, 0, .2);
+    
+    & div {
+        overflow: hidden;
+        clear: both;
+        height: 30px;
+        padding-right: 10px;
+        text-indent: 20px;
+        line-height: 30px;
+        cursor: pointer;
+        background: rgba(0, 0, 0, .1);
+        color: rgba(255, 255, 255, .8);
+        transition: .15s;
+        text-align: start;
+        &.focus,
+        &:hover {
+            text-indent: 30px;
+            background: rgba(0, 0, 0, .2);
+        }
+    }
 }
 </style>

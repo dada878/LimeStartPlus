@@ -1,5 +1,5 @@
 <template>
-    <div class="searchBar">
+    <div id="searchBar">
         <input
             @focusin="$emit('search-focus'); focus = true"
             @focusout="$emit('search-unfocus'); focus = false"
@@ -20,7 +20,7 @@
     </div>
 </template>
 <style lang="scss">
-.searchBar {
+#searchBar {
     position: absolute;
     top: 200px;
     left: 50%;
@@ -56,20 +56,18 @@
             opacity: 0;
         }
     }
-    &:hover {
-        width: 530px;
-        background-color: rgba(15,15,15,.6);
-    }
+    &:hover,
     &:focus-within {
         width: 530px;
-        background-color: rgba(30,30,30,.9);   
+        background-color: rgba(15,15,15,.6);
     }
 }
 
 
 </style>
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue';
+export default defineComponent({
     name: "search-bar",
     data() {
         return {
@@ -83,5 +81,5 @@ export default {
             required: true
         }
     }
-}
+});
 </script>

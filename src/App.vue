@@ -14,6 +14,7 @@
   text-align: center;
   color: white;
   font-family: -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", 'Inter', "Helvetica Neue", sans-serif;
+  user-select: none;
 }
 
 nav {
