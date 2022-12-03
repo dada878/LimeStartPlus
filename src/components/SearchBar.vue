@@ -13,7 +13,7 @@
             inputmode="search" 
         />
         <Transition>
-            <span v-show="focus" style="position: fixed; margin-top: 10px;">
+            <span v-show="focus" style="position: fixed;">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </span>
         </Transition>
@@ -60,6 +60,16 @@
     &:focus-within {
         width: 530px;
         background-color: rgba(15,15,15,.6);
+    }
+    & span {
+        transform: translateX(-6px);
+        background-color: rgba(0, 0, 0, 0.0);
+        padding: 11px;
+        transition: 200ms;
+        cursor: pointer;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
     }
 }
 
