@@ -1,8 +1,7 @@
 <template>
     <Transition>
         <div v-show="show" id="searchSuggestion" style="height: 270px;">
-            <!-- TODO: make the element as <a> -->
-            <div v-for="item, index in suggests" :key="index" :class="{focus:index == toIndex(suggestSelected as number)}">{{ item }}</div>
+            <a :href="('https://www.google.com/search?q='+item)" v-for="item, index in suggests" :key="index" :class="{focus:index == toIndex(suggestSelected as number)}">{{ item }}</a>
         </div>
     </Transition>
 </template>
@@ -73,7 +72,9 @@ export default defineComponent({
     -webkit-backdrop-filter: blur(30px) saturate(1.25);
     backdrop-filter: blur(30px) saturate(1.25);
     
-    & div {
+    & a {
+        text-decoration: none;
+        display: block;
         overflow: hidden;
         clear: both;
         height: 30px;
